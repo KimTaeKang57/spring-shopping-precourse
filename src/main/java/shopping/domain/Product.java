@@ -17,13 +17,6 @@ public class Product {
     protected Product() {
     }
 
-    public Product(Long id, Product product) {
-        this.name = product.getName();
-        this.price = product.getPrice();
-        this.imageUrl = product.getImageUrl();
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }

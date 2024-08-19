@@ -30,7 +30,6 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    @Transactional
     public void update(Long id, Product product) {
         Product findProduct = productRepository.findById(id).orElse(null);
 
