@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import shopping.service.ProductService;
 import shopping.domain.Product;
 
-import java.util.Map;
+import java.util.List;
 
 @RestController
 public class ProductController {
@@ -18,7 +18,7 @@ public class ProductController {
     }
 
     @GetMapping("/api/products")
-    public Map<Long, Product> createProduct(
+    public List<Product> createProduct(
     ) {
         return productService.search();
     }

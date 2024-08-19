@@ -1,39 +1,41 @@
 package shopping.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import shopping.domain.Product;
+import shopping.repository.ProductRepository;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.List;
+
 
 @Service
 public class ProductService {
-    private final Map<Long, Product> products = new HashMap<>();
-    private final AtomicLong idCount = new AtomicLong();
+    private final ProductRepository productRepository;
 
-    public void save(Product product) {
-        Long id = idCount.getAndIncrement();
-
-        Product product1 = new Product(id, product);
-
-        products.put(product1.getId(), product1);
+    @Autowired
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
-    public Map<Long, Product> search() {
-        return products;
+    public void save(Product product) {
+        productRepository.save(product);
+    }
+
+    public List<Product> search() {
+        return productRepository.findAll();
     }
 
     public void delete(Long id) {
-        products.remove(id);
+        productRepository.deleteById(id);
     }
 
+    @Transactional
     public void update(Long id, Product product) {
-        Product product1 = products.get(id);
+        Product findProduct = productRepository.findById(id).orElse(null);
 
-        product1.setName(product.getName());
-        product1.setPrice(product.getPrice());
-        product1.setImageUrl(product.getImageUrl());
+        findProduct.update(product);
+
+        productRepository.save(findProduct);
     }
 }
