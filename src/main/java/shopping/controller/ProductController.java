@@ -1,6 +1,8 @@
 package shopping.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import shopping.service.ProductService;
@@ -18,30 +20,32 @@ public class ProductController {
     }
 
     @GetMapping("/api/products")
-    public List<Product> createProduct(
+    public ResponseEntity<List<Product>> createProduct(
     ) {
-        return productService.search();
+        return new ResponseEntity<>(productService.search(), HttpStatus.OK);
     }
 
     @PostMapping("/api/products")
-    public void createProduct(
+    public ResponseEntity<Product> createProduct(
             @Validated @RequestBody Product product
     ) {
-        productService.save(product);
+        return new ResponseEntity<>(productService.save(product), HttpStatus.CREATED);
     }
 
     @PutMapping("/api/products/{id}")
-    public void modifyProduct(
+    public ResponseEntity<Product> modifyProduct(
             @PathVariable("id") Long id,
             @Validated @RequestBody Product product
     ) {
         productService.update(id, product);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/api/products/{id}")
-    public void deleteProduct(
+    public ResponseEntity<Product> deleteProduct(
             @PathVariable("id") Long id
     ) {
         productService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
